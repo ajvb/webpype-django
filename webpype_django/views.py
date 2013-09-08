@@ -23,10 +23,11 @@ class WebPypeMixin(View):
 
     def __init__(self, **kwargs):
         if not (self.is_block or self.is_trigger or self.is_action):
-            raise NotImplementedError()
+            msg = 'Boolean is_block, is_trigger or is_action must be specified'
+            raise NotImplementedError(msg)
 
         if not self.block_definition:
-            raise NotImplementedError()
+            raise NotImplementedError('block_definition not defined')
 
         return super(WebPypeMixin, self).__init__(**kwargs)
 
@@ -35,13 +36,13 @@ class WebPypeMixin(View):
         return json.dumps(resp)
 
     def block(self, inputs):
-        raise NotImplementedError()
+        raise NotImplementedError('block() not defined')
 
     def trigger(self):
-        raise NotImplementedError()
+        raise NotImplementedError('trigger() not defined')
 
     def action(self, inputs):
-        raise NotImplementedError()
+        raise NotImplementedError('action() not defined')
 
     def post(self, request, *args, **kwargs):
         if not self.is_trigger:
@@ -59,7 +60,8 @@ class WebPypeMixin(View):
         elif self.is_trigger:
             output = self.trigger()
         else:
-            raise NotImplementedError()
+            msg = 'Boolean is_block, is_trigger or is_action must be specified'
+            raise NotImplementedError(msg)
 
         kwargs['content_type'] = 'application/json'
         if self.is_action:
